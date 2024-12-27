@@ -1,0 +1,21 @@
+.css-3pqax5-MuiDataGrid-root {
+  --unstable_DataGrid-headWeight: 600 !important;
+}
+
+.css-1h198sh-MuiDataGrid-root {
+  --unstable_DataGrid-headWeight: 600 !important;
+}
+
+.css-1gqmilo-MuiDataGrid-columnHeaderTitle {
+  font-weight: 600 !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-image-source: linear-gradient(
+    87deg,
+    #ff6b65 0%,
+    #297eff 100%
+  ) !important;
+  border-width: 3pt;
+  border-image-slice: 1;
+}
