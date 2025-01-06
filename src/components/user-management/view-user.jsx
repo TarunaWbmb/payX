@@ -242,7 +242,7 @@ const ViewUser = ({ data }) => {
           </Paper>
         </TabPanel>
         <TabPanel value={value} index="transferLimits">
-          <TransferLimits />
+          <TransferLimits data={data} />
         </TabPanel>
       </Box>
     </>

@@ -203,6 +203,23 @@ export const serviceApi = createApi({
       transformErrorResponse: (response) => response,
       onQueryStarted: onQueryStartedDefault,
     }),
+    getTransferLimits: builder.query({
+      query: ({ userId, currency }) => ({
+        url: `api/admin/get-transfer-limits?userId=${userId}?currency=${currency}`,
+        method: 'GET',
+      }),
+      transformErrorResponse: (response) => response,
+      onQueryStarted: onQueryStartedDefault,
+    }),
+    editTransferLimit: builder.mutation({
+      query: (data) => ({
+        url: '/api/admin/add-transfer-limits',
+        method: 'POST',
+        body: data,
+      }),
+      transformErrorResponse: (response) => response,
+      onQueryStarted: onMutationStartedDefault,
+    }),
   }),
 })
 
@@ -229,4 +246,6 @@ export const {
   useUpdateCurrencyMutation,
   useAddFxExchangeMutation,
   useGetFxExchangeQuery,
+  useGetTransferLimitsQuery,
+  useEditTransferLimitMutation,
 } = serviceApi
