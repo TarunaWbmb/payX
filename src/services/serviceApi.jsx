@@ -205,7 +205,7 @@ export const serviceApi = createApi({
     }),
     getTransferLimits: builder.query({
       query: ({ userId, currency }) => ({
-        url: `api/admin/get-transfer-limits?userId=${userId}?currency=${currency}`,
+        url: `api/admin/get-transfer-limits?userId=${userId}&currency=${currency}`,
         method: 'GET',
       }),
       transformErrorResponse: (response) => response,
