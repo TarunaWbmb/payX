@@ -7,8 +7,11 @@ import {
   Autocomplete,
   TextField,
   Button,
-  IconButton,
   CircularProgress,
+  Tooltip,
+  IconButton,
+  Switch,
+  Modal,
 } from '@mui/material'
 import defaultTheme from '../../theme/default'
 import Grid from '@mui/material/Grid2'
@@ -18,10 +21,14 @@ import {
   useGetSelectedCountriesQuery,
   useDeleteCountryMutation,
 } from '../../services/serviceApi'
-import CancelIcon from '@mui/icons-material/Cancel'
+import { DataGrid } from '@mui/x-data-grid'
+import DeleteIcon from '@mui/icons-material/Delete'
+import DeleteModal from '../../common/delete-modal'
 
 const CountryManagement = () => {
   const [selectedOptions, setSelectedOptions] = useState()
+  const [open, setOpen] = useState(false)
+  const [modalData, setModalData] = useState()
 
   const { data: allCountries } = useGetAllCountriesQuery()
   const {
@@ -56,77 +63,109 @@ const CountryManagement = () => {
     refetch()
   }
 
-  const handleRemoveCountry = async (item) => {
+  const handleRemoveCountry = async () => {
     try {
-      await deleteCountry(item)
+      await deleteCountry(modalData)
     } catch (error) {
       throw new Error(error)
     }
     refetch()
+    setOpen(false)
+  }
+
+  const handleDeleteClick = (data) => {
+    setOpen(true)
+    setModalData(data)
+  }
+
+  const columns = [
+    {
+      field: 'telePhoneCode',
+      headerName: 'Telephone Code',
+      width: 140,
+    },
+    {
+      field: 'code',
+      headerName: 'Country Code',
+      width: 120,
+    },
+    {
+      field: 'country',
+      headerName: 'Country',
+      width: 200,
+    },
+    {
+      field: 'status',
+      headerName: 'Status',
+      width: 100,
+      renderCell: (params) => (
+        <Switch
+          defaultChecked={params.row.status === 'Active' ? true : false}
+          onChange={async () => {
+            const payload = {
+              code: params.row.code,
+              status: !params.row.status,
+            }
+            try {
+              await console.log(payload)
+              // await updateCurrency(payload)
+            } catch (error) {
+              throw new Error(error)
+            }
+            refetch()
+          }}
+        />
+      ),
+    },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      renderCell: (params) => (
+        <>
+          {params.row.status !== 'Deleted' && (
+            <Tooltip title="delete">
+              <IconButton>
+                <DeleteIcon
+                  sx={{
+                    color: defaultTheme.palette.error.main,
+                  }}
+                  onClick={() => {
+                    handleDeleteClick(params.row)
+                  }}
+                />
+              </IconButton>
+            </Tooltip>
+          )}
+        </>
+      ),
+    },
+  ]
+
+  const paginationModel = { page: 0, pageSize: 5 }
+
+  const handleClose = () => {
+    setOpen(false)
   }
 
   return (
     <Paper elevation={2} sx={{ padding: '20px', minHeight: '75vh' }}>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <DeleteModal
+          heading={'Delete Country'}
+          name={modalData?.telePhoneCode + ' ' + modalData?.country}
+          handleClose={handleClose}
+          handleSaveClick={handleRemoveCountry}
+        />
+      </Modal>
       <Box>
         <Typography variant="h6">Country Management</Typography>
       </Box>
-      <Box mt={3} mb={5}>
-        <Typography variant="body2">Selected Countries:</Typography>
-        <Grid id="modal-modal-description" sx={{ mt: 2 }}>
-          <Grid
-            container
-            spacing={1.2}
-            display={'flex'}
-            justifyContent={'center'}
-          >
-            {!isLoading ? (
-              selectedCountries?.data?.map((item) => (
-                <Grid
-                  size={3.5}
-                  padding={1}
-                  key={item?.code}
-                  borderRadius={1}
-                  sx={{
-                    backgroundColor: defaultTheme.palette.primary.light,
-                  }}
-                  display={'flex'}
-                  justifyContent={'space-between'}
-                >
-                  <Typography
-                    display={'flex'}
-                    justifyContent={'center'}
-                    fontWeight={600}
-                    color={defaultTheme.palette.secondary.dark}
-                  >
-                    ({item?.telePhoneCode}) {item?.country} ({item?.code})
-                  </Typography>
-                  <Typography>
-                    <IconButton
-                      style={{
-                        margin: '0px',
-                        padding: '0px',
-                      }}
-                      onClick={() => handleRemoveCountry(item)}
-                    >
-                      <CancelIcon
-                        style={{
-                          fontSize: '17px',
-                        }}
-                      />
-                    </IconButton>
-                  </Typography>
-                </Grid>
-              ))
-            ) : (
-              <CircularProgress />
-            )}
-          </Grid>
-          {selectedCountries?.data?.length === 0 && (
-            <Typography color="grey">Please select a Country</Typography>
-          )}
-        </Grid>
-      </Box>
-      <Divider />
       <Box mt={5}>
         <Autocomplete
           multiple
@@ -160,12 +199,44 @@ const CountryManagement = () => {
         />
       </Box>
       {selectedOptions?.length > 0 && (
-        <Box mt={4}>
+        <Box mt={4} mb={2}>
           <Button variant="contained" onClick={handleApplyClicked}>
             Apply Changes
           </Button>
         </Box>
       )}
+      <Divider />
+      <Box mt={3} mb={5}>
+        <Typography variant="body2">Selected Countries:</Typography>
+        <Grid id="modal-modal-description" sx={{ mt: 2 }}>
+          <Grid
+            container
+            spacing={1.2}
+            display={'flex'}
+            justifyContent={'center'}
+          >
+            {!isLoading ? (
+              <DataGrid
+                rows={selectedCountries?.data || []}
+                columns={columns}
+                initialState={{ pagination: { paginationModel } }}
+                pageSizeOptions={[5, 10, 15]}
+                sx={{ border: 0 }}
+                getRowId={(row) => row.code}
+                components={{
+                  LoadingOverlay: isLoading ? <CircularProgress /> : null,
+                }}
+                loading={isLoading}
+              />
+            ) : (
+              <CircularProgress />
+            )}
+          </Grid>
+          {selectedCountries?.data?.length === 0 && (
+            <Typography color="grey">Please select a Country</Typography>
+          )}
+        </Grid>
+      </Box>
     </Paper>
   )
 }

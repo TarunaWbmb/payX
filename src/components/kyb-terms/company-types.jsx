@@ -8,8 +8,6 @@ import {
   CircularProgress,
   Tooltip,
   Modal,
-  Box,
-  Button,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import SendIcon from '@mui/icons-material/Send'
@@ -22,6 +20,7 @@ import {
 import { DataGrid } from '@mui/x-data-grid'
 import { formatDate } from '../../common/methods'
 import DeleteIcon from '@mui/icons-material/Delete'
+import DeleteModal from '../../common/delete-modal'
 
 const CompanyTypes = () => {
   const [value, setValue] = useState('')
@@ -141,44 +140,12 @@ const CompanyTypes = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 550,
-            height: 210,
-            bgcolor: 'background.paper',
-            border: `3px solid ${defaultTheme.palette.secondary.main}`,
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 4,
-            overflow: 'auto',
-          }}
-        >
-          <Typography variant="h6">Delete Company Type</Typography>
-          <Typography variant="subtitle1" mt={2}>
-            Are you sure you want to delete {modalData?.companyType}?
-          </Typography>
-          <Grid
-            container
-            mt={3}
-            display={'flex'}
-            justifyContent={'space-between'}
-          >
-            <Grid>
-              <Button variant="outlined" onClick={handleClose}>
-                Cancel
-              </Button>
-            </Grid>
-            <Grid>
-              <Button variant="contained" onClick={handleSaveClick}>
-                Save
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
+        <DeleteModal
+          heading={'Delete Company Type'}
+          name={modalData?.companyType}
+          handleClose={handleClose}
+          handleSaveClick={handleSaveClick}
+        />
       </Modal>
       <Typography variant="body">Company Type</Typography>
       <Grid mt={3}>
