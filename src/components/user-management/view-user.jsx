@@ -96,7 +96,7 @@ const ViewUser = ({ data }) => {
         <Grid container display={'flex'} justifyContent={'space-between'}>
           <Grid sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography color={defaultTheme.palette.secondary.dark}>
-              Customer ID:
+              PayX Tag:
             </Typography>
             <Typography
               ml={1}
@@ -104,7 +104,7 @@ const ViewUser = ({ data }) => {
               color={defaultTheme.palette.secondary.dark}
               fontWeight={600}
             >
-              {data?.uniqueName || ''}
+              {data?.payxTag || ''}
             </Typography>
           </Grid>
           <Grid sx={{ display: 'flex', alignItems: 'center' }}>
@@ -194,7 +194,7 @@ const ViewUser = ({ data }) => {
               <Grid size={6}>
                 <GridItem label="First Name" value={data?.firstName} />
                 <GridItem label="Last Name" value={data?.lastName} />
-                <GridItem label="Customer ID" value={data?.uniqueName} />
+                <GridItem label="PayX Tag" value={data?.payxTag} />
                 <GridItem label="Date of Birth" value={data?.dob} />
                 <GridItem label="Phone Number" value={data?.phoneNo} />
                 <GridItem label="Registered As" value={data?.registerAs} />

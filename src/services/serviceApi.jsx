@@ -220,6 +220,32 @@ export const serviceApi = createApi({
       transformErrorResponse: (response) => response,
       onQueryStarted: onMutationStartedDefault,
     }),
+    addKybTerms: builder.mutation({
+      query: (data) => ({
+        url: '/api/admin/add-kyb-terms',
+        method: 'POST',
+        body: data,
+      }),
+      transformErrorResponse: (response) => response,
+      onQueryStarted: onMutationStartedDefault,
+    }),
+    getKybTerms: builder.query({
+      query: ({ kybTermsType }) => ({
+        url: `/api/admin/get-kyb-terms?kybTermsType=${kybTermsType}`,
+        method: 'GET',
+      }),
+      transformErrorResponse: (response) => response,
+      onQueryStarted: onQueryStartedDefault,
+    }),
+    updateKybTerms: builder.mutation({
+      query: (data) => ({
+        url: '/api/admin/update-kyb-terms',
+        method: 'POST',
+        body: data,
+      }),
+      transformErrorResponse: (response) => response,
+      onQueryStarted: onMutationStartedDefault,
+    }),
   }),
 })
 
@@ -248,4 +274,7 @@ export const {
   useGetFxExchangeQuery,
   useGetTransferLimitsQuery,
   useEditTransferLimitMutation,
+  useAddKybTermsMutation,
+  useGetKybTermsQuery,
+  useUpdateKybTermsMutation,
 } = serviceApi

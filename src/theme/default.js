@@ -76,7 +76,9 @@ const defaultTheme = createTheme({
         {
           props: { variant: 'body' },
           style: {
-            fontSize: '20px',
+            color: colors.secondary.main,
+            fontSize:'18px',
+            fontWeight:600
           },
         },
         {
@@ -88,7 +90,8 @@ const defaultTheme = createTheme({
         {
           props: { variant: 'body2' },
           style: {
-            fontSize: '18px',
+            color: colors.secondary.dark,
+            fontWeight:600
           },
         },
       ],
