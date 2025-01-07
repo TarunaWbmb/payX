@@ -6,6 +6,7 @@ import defaultTheme from '../../theme/default'
 import PropTypes from 'prop-types'
 import AdjustIcon from '@mui/icons-material/Adjust'
 import TransferLimits from './transfer-limits'
+import { formatDate } from '../../common/methods'
 
 const GridItem = ({ label, value }) => {
   return (
@@ -197,13 +198,26 @@ const ViewUser = ({ data }) => {
                 <GridItem label="PayX Tag" value={data?.payxTag} />
                 <GridItem label="Date of Birth" value={data?.dob} />
                 <GridItem label="Phone Number" value={data?.phoneNo} />
-                <GridItem label="Registered As" value={data?.registerAs} />
+                <GridItem label="Asset Type ID" value={data?.assetTypeId} />
+                <GridItem
+                  label="User Created At"
+                  value={formatDate(data?.createdAt)}
+                />
+                <GridItem label="Occupation" value={data?.occupation} />
+                <GridItem
+                  label="Primary Source of Funds"
+                  value={data?.primarySourceOfFunds}
+                />
               </Grid>
               <Grid size={6}>
                 <GridItem label="Email" value={data?.email} />
+
+                <GridItem label="Citizenship" value={data?.citizenship} />
+                <GridItem label="Address Line 1" value={data?.addressLine1} />
+                <GridItem label="Address Line 2" value={data?.addressLine2} />
+                <GridItem label="City" value={data?.city} />
                 <GridItem label="State" value={data?.state} />
                 <GridItem label="Country" value={data?.country} />
-                <GridItem label="Address" value={data?.address} />
                 <GridItem label="Pin Code" value={data?.pincode} />
                 <GridItem label="Language" value={data?.language} />
               </Grid>
