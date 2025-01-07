@@ -67,18 +67,11 @@ const CountryManagement = () => {
 
   return (
     <Paper elevation={2} sx={{ padding: '20px', minHeight: '75vh' }}>
-     <Box>
-        <Typography variant="h6">
-          Country Management
-        </Typography>
+      <Box>
+        <Typography variant="h6">Country Management</Typography>
       </Box>
       <Box mt={3} mb={5}>
-        <Typography
-          color={defaultTheme.palette.secondary.dark}
-          fontWeight={600}
-        >
-          Selected Countries:
-        </Typography>
+        <Typography variant="body2">Selected Countries:</Typography>
         <Grid id="modal-modal-description" sx={{ mt: 2 }}>
           <Grid
             container

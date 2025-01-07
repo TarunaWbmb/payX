@@ -25,6 +25,7 @@ import CountryLanguage from '../components/country-language'
 import EmailTemplateManagement from '../components/email-template'
 import SmsTemplateManagement from '../components/sms-template'
 import TermsAndConditions from '../components/terms-and-conditions'
+import KYBTerms from '../components/kyb-terms'
 
 const Routes = () => {
   return (
@@ -86,6 +87,7 @@ const Routes = () => {
               path="sms-template-management"
               element={<SmsTemplateManagement />}
             />
+            <Route exact path="kyb-terms" element={<KYBTerms />} />
             <Route
               exact
               path="terms-and-conditions"

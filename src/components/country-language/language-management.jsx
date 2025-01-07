@@ -75,12 +75,7 @@ const LanguageManagement = () => {
         <Typography variant="h6">Language Management</Typography>
       </Box>
       <Box mt={3} mb={5}>
-        <Typography
-          color={defaultTheme.palette.secondary.dark}
-          fontWeight={600}
-        >
-          Selected Languages:
-        </Typography>
+        <Typography variant="body2">Selected Languages:</Typography>
         <Grid id="modal-modal-description" sx={{ mt: 2 }}>
           <Grid
             container

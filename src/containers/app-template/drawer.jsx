@@ -29,6 +29,7 @@ import LanguageIcon from '@mui/icons-material/Language'
 import SmsIcon from '@mui/icons-material/Sms'
 import GradingIcon from '@mui/icons-material/Grading'
 import logoImage from '../../assets/images/Logo.png'
+import CategoryIcon from '@mui/icons-material/Category'
 
 const DrawerComponent = (props) => {
   const [mobileOpen, setMobileOpen] = React.useState(false)
@@ -126,6 +127,11 @@ const DrawerComponent = (props) => {
       name: 'Sms Template Management',
       route: '/sms-template-management',
       icon: <SmsIcon />,
+    },
+    {
+      name: 'KYB Terms',
+      route: '/kyb-terms',
+      icon: <CategoryIcon />,
     },
     {
       name: 'Terms and Conditions',

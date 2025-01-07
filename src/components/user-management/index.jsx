@@ -16,10 +16,10 @@ const UserManagement = () => {
 
   const columns = [
     {
-      field: 'uniqueName',
-      headerName: 'Customer ID',
+      field: 'payxTag',
+      headerName: 'PayX Tag',
       width: 200,
-      renderCell: (params) => <>{params?.row?.uniqueName || '-'}</>,
+      renderCell: (params) => <>{params?.row?.payxTag || '-'}</>,
     },
     {
       field: 'fullName',
