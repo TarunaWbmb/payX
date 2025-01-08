@@ -1,11 +1,13 @@
 import { Box, IconButton, Typography, Tabs, Tab, Paper } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Grid from '@mui/material/Grid2'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import defaultTheme from '../../theme/default'
 import PropTypes from 'prop-types'
 import AdjustIcon from '@mui/icons-material/Adjust'
 import TransferLimits from './transfer-limits'
+import { formatDate } from '../../common/methods'
+import { useGetBeneficiaryDataQuery } from '../../services/serviceApi'
 
 const GridItem = ({ label, value }) => {
   return (
@@ -41,9 +43,19 @@ function TabPanel(props) {
 const ViewUser = ({ data }) => {
   const [value, setValue] = React.useState('basicInfo')
 
+  const { data: beneficiaryData, refetch } = useGetBeneficiaryDataQuery({
+    userId: data?._id,
+  })
+
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+
+  useEffect(() => {
+    if (!beneficiaryData?.data) {
+      refetch()
+    }
+  }, [beneficiaryData])
 
   return (
     <>
@@ -197,13 +209,26 @@ const ViewUser = ({ data }) => {
                 <GridItem label="PayX Tag" value={data?.payxTag} />
                 <GridItem label="Date of Birth" value={data?.dob} />
                 <GridItem label="Phone Number" value={data?.phoneNo} />
-                <GridItem label="Registered As" value={data?.registerAs} />
+                <GridItem label="Asset Type ID" value={data?.assetTypeId} />
+                <GridItem
+                  label="User Created At"
+                  value={formatDate(data?.createdAt)}
+                />
+                <GridItem label="Occupation" value={data?.occupation} />
+                <GridItem
+                  label="Primary Source of Funds"
+                  value={data?.primarySourceOfFunds}
+                />
               </Grid>
               <Grid size={6}>
                 <GridItem label="Email" value={data?.email} />
+
+                <GridItem label="Citizenship" value={data?.citizenship} />
+                <GridItem label="Address Line 1" value={data?.addressLine1} />
+                <GridItem label="Address Line 2" value={data?.addressLine2} />
+                <GridItem label="City" value={data?.city} />
                 <GridItem label="State" value={data?.state} />
                 <GridItem label="Country" value={data?.country} />
-                <GridItem label="Address" value={data?.address} />
                 <GridItem label="Pin Code" value={data?.pincode} />
                 <GridItem label="Language" value={data?.language} />
               </Grid>
@@ -237,6 +262,122 @@ const ViewUser = ({ data }) => {
                 <GridItem label="SSN or ITIN" value={data?.ssnOrItin} />
                 <GridItem label="Tin Number" value={data?.tinNumber} />
                 <GridItem label="Purpose of PayX" value={data?.purposeOfPayX} />
+              </Grid>
+            </Grid>
+          </Paper>
+        </TabPanel>
+        <TabPanel value={value} index="beneficiaryInfo">
+          <Paper
+            elevation={2}
+            sx={{ minHeight: '50vh', width: '75vw', padding: '30px' }}
+          >
+            <Grid
+              container
+              display={'flex'}
+              mt={3}
+              justifyContent={'space-between'}
+            >
+              <Grid>
+                <Grid container spacing={2}>
+                  <Grid>
+                    <img
+                      width={50}
+                      height={50}
+                      style={{
+                        boxShadow: '0px 0px 5px 2px rgba(0, 0, 0, 0.2)',
+                      }}
+                      // href={beneficiaryData?.data?.profilePic}
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9WuG9WOoa3eJ5cyDljhCvQzkybI_Rm82UUQ&s"
+                    />
+                  </Grid>
+                  <Grid>
+                    <Typography color={defaultTheme.palette.secondary.dark}>
+                      Name:
+                    </Typography>
+                    <Typography
+                      fontWeight={600}
+                      color={defaultTheme.palette.secondary.dark}
+                    >
+                      {beneficiaryData?.data?.beneficiaryFirstName}{' '}
+                      {beneficiaryData?.data?.beneficiaryLastName}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid size={6}>
+                <GridItem
+                  label="User Id"
+                  value={beneficiaryData?.data?.userId}
+                />
+                <GridItem
+                  label="Beneficiary First Name"
+                  value={beneficiaryData?.data?.beneficiaryFirstName}
+                />
+                <GridItem
+                  label="Beneficiary Middle Name"
+                  value={beneficiaryData?.data?.beneficiaryMiddleName}
+                />
+                <GridItem
+                  label="Beneficiary Last Name"
+                  value={beneficiaryData?.data?.beneficiaryLastName}
+                />
+                <GridItem label="Role" value={beneficiaryData?.data?.role} />
+                <GridItem
+                  label="UBO Percentage Ownership"
+                  value={beneficiaryData?.data?.UBOPercentageOwnership}
+                />
+                <GridItem
+                  label="Beneficiary Nationality"
+                  value={beneficiaryData?.data?.beneficiaryNationality}
+                />
+                <GridItem
+                  label="Beneficiary Citizenship"
+                  value={beneficiaryData?.data?.beneficiaryCitizenship}
+                />
+                <GridItem
+                  label="Beneficiary Email"
+                  value={beneficiaryData?.data?.beneficiaryEmail}
+                />
+              </Grid>
+              <Grid size={6}>
+                <GridItem
+                  label="Business Id"
+                  value={beneficiaryData?.data?.businessId}
+                />
+                <GridItem
+                  label="Beneficiary Phone No"
+                  value={beneficiaryData?.data?.beneficiaryPhoneNo}
+                />
+                <GridItem
+                  label="Beneficiary DOB"
+                  value={beneficiaryData?.data?.beneficiarydob}
+                />
+                <GridItem
+                  label="Beneficiary Address"
+                  value={beneficiaryData?.data?.beneficiaryAddress}
+                />
+                <GridItem
+                  label="Beneficiary Country"
+                  value={beneficiaryData?.data?.beneficiaryCountry}
+                />
+                <GridItem
+                  label="Beneficiary State"
+                  value={beneficiaryData?.data?.beneficiaryState}
+                />
+                <GridItem
+                  label="Beneficiary City"
+                  value={beneficiaryData?.data?.beneficiaryCity}
+                />
+                <GridItem
+                  label="Beneficiary Pincode"
+                  value={beneficiaryData?.data?.beneficiaryPincode}
+                />
+                <GridItem
+                  label="Beneficiary Tax Ref No"
+                  value={beneficiaryData?.data?.beneficiaryTaxRefNo}
+                />
               </Grid>
             </Grid>
           </Paper>

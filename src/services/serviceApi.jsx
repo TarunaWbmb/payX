@@ -66,9 +66,9 @@ export const serviceApi = createApi({
       transformErrorResponse: (response) => response,
       onQueryStarted: onMutationStartedDefault,
     }),
-    deleteLanguage: builder.mutation({
+    updateLanguage: builder.mutation({
       query: (data) => ({
-        url: '/api/admin/delete-language',
+        url: '/api/admin/update-language',
         method: 'POST',
         body: data,
       }),
@@ -100,9 +100,9 @@ export const serviceApi = createApi({
       transformErrorResponse: (response) => response,
       onQueryStarted: onQueryStartedDefault,
     }),
-    deleteCountry: builder.mutation({
+    updateCountry: builder.mutation({
       query: (data) => ({
-        url: '/api/admin/delete-country',
+        url: '/api/admin/update-country',
         method: 'POST',
         body: data,
       }),
@@ -246,6 +246,14 @@ export const serviceApi = createApi({
       transformErrorResponse: (response) => response,
       onQueryStarted: onMutationStartedDefault,
     }),
+    getBeneficiaryData: builder.query({
+      query: ({ userId }) => ({
+        url: `/api/admin/get-beneficiary?userId=${userId}`,
+        method: 'GET',
+      }),
+      transformErrorResponse: (response) => response,
+      onQueryStarted: onQueryStartedDefault,
+    }),
   }),
 })
 
@@ -256,11 +264,11 @@ export const {
   useGetAllLangQuery,
   useGetSelectedLangQuery,
   useAddLanguageMutation,
-  useDeleteLanguageMutation,
+  useUpdateLanguageMutation,
   useGetAllCountriesQuery,
   useAddCountryMutation,
   useGetSelectedCountriesQuery,
-  useDeleteCountryMutation,
+  useUpdateCountryMutation,
   useAddEmailTemplateMutation,
   useGetEmailTemplatesQuery,
   useEditEmailTemplateMutation,
@@ -277,4 +285,5 @@ export const {
   useAddKybTermsMutation,
   useGetKybTermsQuery,
   useUpdateKybTermsMutation,
+  useGetBeneficiaryDataQuery,
 } = serviceApi
