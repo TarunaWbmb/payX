@@ -109,7 +109,7 @@ const LanguageManagement = () => {
           onChange={async () => {
             const payload = {
               code: params.row.code,
-              status: !params.row.status,
+              status: params?.row?.status === 'Active' ? 'Inactive' : 'Active',
             }
             try {
               await console.log(payload)
@@ -130,13 +130,14 @@ const LanguageManagement = () => {
         <>
           {params.row.status !== 'Deleted' && (
             <Tooltip title="delete">
-              <IconButton>
+              <IconButton
+                onClick={() => {
+                  handleDeleteClick(params.row)
+                }}
+              >
                 <DeleteIcon
                   sx={{
                     color: defaultTheme.palette.error.main,
-                  }}
-                  onClick={() => {
-                    handleDeleteClick(params.row)
                   }}
                 />
               </IconButton>
@@ -155,12 +156,14 @@ const LanguageManagement = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <DeleteModal
-          heading={'Delete Language'}
-          name={modalData?.language}
-          handleClose={handleClose}
-          handleSaveClick={handleRemoveLanguage}
-        />
+        <>
+          <DeleteModal
+            heading={'Delete Language'}
+            name={modalData?.language}
+            handleClose={handleClose}
+            handleSaveClick={handleRemoveLanguage}
+          />
+        </>
       </Modal>
       <Box>
         <Typography variant="h6">Language Management</Typography>

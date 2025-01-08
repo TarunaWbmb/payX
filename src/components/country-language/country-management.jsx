@@ -104,7 +104,7 @@ const CountryManagement = () => {
           onChange={async () => {
             const payload = {
               code: params.row.code,
-              status: !params.row.status,
+              status: params?.row?.status === 'Active' ? 'Inactive' : 'Active',
             }
             try {
               await console.log(payload)
@@ -125,13 +125,14 @@ const CountryManagement = () => {
         <>
           {params.row.status !== 'Deleted' && (
             <Tooltip title="delete">
-              <IconButton>
+              <IconButton
+                onClick={() => {
+                  handleDeleteClick(params.row)
+                }}
+              >
                 <DeleteIcon
                   sx={{
                     color: defaultTheme.palette.error.main,
-                  }}
-                  onClick={() => {
-                    handleDeleteClick(params.row)
                   }}
                 />
               </IconButton>
@@ -156,12 +157,14 @@ const CountryManagement = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <DeleteModal
-          heading={'Delete Country'}
-          name={modalData?.telePhoneCode + ' ' + modalData?.country}
-          handleClose={handleClose}
-          handleSaveClick={handleRemoveCountry}
-        />
+        <>
+          <DeleteModal
+            heading={'Delete Country'}
+            name={modalData?.telePhoneCode + ' ' + modalData?.country}
+            handleClose={handleClose}
+            handleSaveClick={handleRemoveCountry}
+          />
+        </>
       </Modal>
       <Box>
         <Typography variant="h6">Country Management</Typography>
