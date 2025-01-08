@@ -16,7 +16,7 @@ import {
 import Grid from '@mui/material/Grid2'
 import {
   useGetSelectedLangQuery,
-  useDeleteLanguageMutation,
+  useUpdateLanguageMutation,
   useGetAllLangQuery,
   useAddLanguageMutation,
 } from '../../services/serviceApi'
@@ -35,7 +35,7 @@ const LanguageManagement = () => {
     refetch,
     isLoading,
   } = useGetSelectedLangQuery({})
-  const [deleteLanguage] = useDeleteLanguageMutation()
+  const [updateLanguage] = useUpdateLanguageMutation()
   const { data: allLanguages } = useGetAllLangQuery()
   const [addLanguage] = useAddLanguageMutation()
 
@@ -43,7 +43,8 @@ const LanguageManagement = () => {
 
   const handleRemoveLanguage = async () => {
     try {
-      await deleteLanguage(modalData)
+      const payload = { ...modalData, status: 'Deleted' }
+      await updateLanguage(payload)
     } catch (error) {
       throw new Error(error)
     }
@@ -92,34 +93,49 @@ const LanguageManagement = () => {
     {
       field: 'code',
       headerName: 'Language Code',
-      width: 170,
+      width: 160,
     },
     {
       field: 'language',
       headerName: 'Language',
-      width: 270,
+      width: 200,
     },
     {
       field: 'status',
       headerName: 'Status',
-      width: 100,
+      width: 160,
       renderCell: (params) => (
-        <Switch
-          defaultChecked={params.row.status === 'Active' ? true : false}
-          onChange={async () => {
-            const payload = {
-              code: params.row.code,
-              status: params?.row?.status === 'Active' ? 'Inactive' : 'Active',
+        <>
+          <Switch
+            defaultChecked={params.row.status === 'Active' ? true : false}
+            onChange={async () => {
+              const payload = {
+                code: params.row.code,
+                language: params.row.language,
+                status:
+                  params?.row?.status === 'Active' ? 'Inactive' : 'Active',
+              }
+              try {
+                await updateLanguage(payload)
+              } catch (error) {
+                throw new Error(error)
+              }
+              refetch()
+            }}
+          />
+          <Typography
+            color={
+              params.row.status === 'Active'
+                ? defaultTheme.palette.success.main
+                : params.row.status === 'Deleted'
+                  ? defaultTheme.palette.error.main
+                  : defaultTheme.palette.secondary.main
             }
-            try {
-              await console.log(payload)
-              // await updateCurrency(payload)
-            } catch (error) {
-              throw new Error(error)
-            }
-            refetch()
-          }}
-        />
+            display={'inline'}
+          >
+            {params.row.status}
+          </Typography>
+        </>
       ),
     },
     {

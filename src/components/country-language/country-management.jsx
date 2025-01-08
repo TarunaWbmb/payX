@@ -19,7 +19,7 @@ import {
   useGetAllCountriesQuery,
   useAddCountryMutation,
   useGetSelectedCountriesQuery,
-  useDeleteCountryMutation,
+  useUpdateCountryMutation,
 } from '../../services/serviceApi'
 import { DataGrid } from '@mui/x-data-grid'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -37,7 +37,7 @@ const CountryManagement = () => {
     refetch,
   } = useGetSelectedCountriesQuery()
   const [addCountry] = useAddCountryMutation()
-  const [deleteCountry] = useDeleteCountryMutation({})
+  const [updateCountry] = useUpdateCountryMutation({})
 
   const handleChange = (event, newValue) => {
     setSelectedOptions(newValue)
@@ -65,7 +65,8 @@ const CountryManagement = () => {
 
   const handleRemoveCountry = async () => {
     try {
-      await deleteCountry(modalData)
+      const payload = { ...modalData, status: 'Deleted' }
+      await updateCountry(payload)
     } catch (error) {
       throw new Error(error)
     }
@@ -82,7 +83,7 @@ const CountryManagement = () => {
     {
       field: 'telePhoneCode',
       headerName: 'Telephone Code',
-      width: 140,
+      width: 130,
     },
     {
       field: 'code',
@@ -92,29 +93,44 @@ const CountryManagement = () => {
     {
       field: 'country',
       headerName: 'Country',
-      width: 200,
+      width: 170,
     },
     {
       field: 'status',
       headerName: 'Status',
-      width: 100,
+      width: 150,
       renderCell: (params) => (
-        <Switch
-          defaultChecked={params.row.status === 'Active' ? true : false}
-          onChange={async () => {
-            const payload = {
-              code: params.row.code,
-              status: params?.row?.status === 'Active' ? 'Inactive' : 'Active',
+        <>
+          <Switch
+            defaultChecked={params.row.status === 'Active' ? true : false}
+            onChange={async () => {
+              const payload = {
+                code: params.row.code,
+                country: params.row.country,
+                status:
+                  params?.row?.status === 'Active' ? 'Inactive' : 'Active',
+              }
+              try {
+                await updateCountry(payload)
+              } catch (error) {
+                throw new Error(error)
+              }
+              refetch()
+            }}
+          />
+          <Typography
+            color={
+              params.row.status === 'Active'
+                ? defaultTheme.palette.success.main
+                : params.row.status === 'Deleted'
+                  ? defaultTheme.palette.error.main
+                  : defaultTheme.palette.secondary.main
             }
-            try {
-              await console.log(payload)
-              // await updateCurrency(payload)
-            } catch (error) {
-              throw new Error(error)
-            }
-            refetch()
-          }}
-        />
+            display={'inline'}
+          >
+            {params.row.status}
+          </Typography>
+        </>
       ),
     },
     {
