@@ -4,6 +4,8 @@ import {
   loadingStarted,
   successAlert,
 } from '../redux/reducers/appSlice'
+import { reset } from '../redux/reducers/loginSlice'
+
 
 export const onQueryStartedDefault = async (
   id,
@@ -17,7 +19,7 @@ export const onQueryStartedDefault = async (
   } catch (err) {
     // `onError` side-effect
     dispatch(loadingComplete())
-    if (err?.error?.status === 401) {
+    if (err?.error?.originalStatus === 401 || err?.error?.originalStatus === 403) {
       // if unauthorization error,logout user.
       // dispatch(signOut())
       dispatch(
@@ -27,6 +29,9 @@ export const onQueryStartedDefault = async (
             : 'Session expired, please sign in again!',
         }),
       )
+      sessionStorage.removeItem('token')
+      dispatch(reset())
+      window.location.href('/')
     } else {
       dispatch(
         errorAlert({
@@ -41,7 +46,7 @@ export const onQueryStarted = async (id, { dispatch, queryFulfilled }) => {
   try {
     await queryFulfilled
   } catch (err) {
-    if (err?.error?.status === 401) {
+    if (err?.error?.originalStatus === 401) {
       // if unauthorization error,logout user.
       // dispatch(signOut())
       dispatch(
@@ -68,7 +73,7 @@ export const onMutationStartedDefault = async (
     }
   } catch (err) {
     dispatch(loadingComplete())
-    if (err?.error?.status === 401) {
+    if (err?.error?.originalStatus === 401) {
       // if unauthorization error,logout user.
       // dispatch(signOut());
       dispatch(
@@ -92,7 +97,7 @@ export const onMutationStarted = async (id, { dispatch, queryFulfilled }) => {
   try {
     await queryFulfilled
   } catch (err) {
-    if (err?.error?.status === 401) {
+    if (err?.error?.originalStatus === 401) {
       // if unauthorization error,logout user.
       // dispatch(signOut());
       dispatch(

@@ -18,9 +18,13 @@ import LockIcon from '@mui/icons-material/Lock'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import logoImage from '../../../assets/images/Logo.png'
+import { useDispatch } from 'react-redux'
+import { setToken } from '../../../redux/reducers/loginSlice'
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
+
+  const dispatch = useDispatch()
 
   const schema = yup.object().shape({
     email: yup.string().required('Email is required'),
@@ -44,6 +48,7 @@ const Login = () => {
       const response = await login(data)
       if (response?.data?.token) {
         sessionStorage.setItem('token', response?.data?.token)
+        dispatch(setToken(response?.data?.token))
         navigate('/dashboard')
       }
     } catch (error) {
