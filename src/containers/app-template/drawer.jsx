@@ -30,6 +30,8 @@ import SmsIcon from '@mui/icons-material/Sms'
 import GradingIcon from '@mui/icons-material/Grading'
 import logoImage from '../../assets/images/Logo.png'
 import CategoryIcon from '@mui/icons-material/Category'
+import { reset } from '../../redux/reducers/loginSlice'
+import { useDispatch } from 'react-redux'
 
 const DrawerComponent = (props) => {
   const [mobileOpen, setMobileOpen] = React.useState(false)
@@ -38,6 +40,8 @@ const DrawerComponent = (props) => {
   const drawerWidth = 300
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useDispatch()
+
   const [logout] = useLogoutAdminMutation()
 
   const { window } = props
@@ -64,6 +68,7 @@ const DrawerComponent = (props) => {
     try {
       const response = await logout()
       if (!response.error) {
+        dispatch(reset())
         sessionStorage.clear('token')
         navigate('/')
       }
